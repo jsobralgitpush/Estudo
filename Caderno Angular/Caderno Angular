@@ -1,0 +1,343 @@
+// Instalando o Angular
+
+  npm install -g @angular/cli
+  ng new my-dream-app  // com este comando construiremos uma série de pastas (pode demorar um pouco)
+  ng serve  (geralmente a porta usada é a 4200; demora um pouco para compilar o arquivo e rodar o programa)
+  
+
+// ****************************************************************************************
+
+// Explorando um pouco das pastas: SCR
+ 
+  // Aqui estarão os arquivos mais importantes do nosso projeto; teremos:
+  
+    // app.module.ts
+    
+      // Todos os modulos importados
+    
+    // app.component.ts
+    
+       // Aqui criaremos todos os nossos componentes que serão importados como um modulo 
+       // Alguns componentes interessantes do angular são, por exemplo: 
+        // Header
+        // Nav-bar
+        // Nav-itens
+        // Nav-search
+        // app-features
+      
+    // index.html
+    
+      // Arquivo HTML onde a magia vai acontecer :D
+      // É interessante perceber como existe uma tag neste arquivo chamada <app-root>...esta não é uma tag padrão de HTML e sim um componente que criamos
+      
+
+// ****************************************************************************************
+
+// Criando nosso primeiro componente
+
+  // 1-Dentro da nossa pasta "app", criamos uma pasta nova com o nosso primeiro componente
+  
+  // 2-Agora criamos exatamente os mesmos arquivos da nossa pasta "app"
+    // a) exemplo.component.ts
+        // Aqui dentro, codamos as configurações inicias:
+        
+        import { Component } from '@angular/core'
+        
+        @Component({
+          selector: 'nome da tag do nosso component no nosso arquivo HTML' ex 'app-diretorio-criado'
+          templateUrl: 'diretorio do nosso arquivo HTML' ex: './arquivo.html'
+          
+        })
+        
+        export class 'nome do nosso componente' (sem regra) {
+        }
+        
+    // b) exemplo.html -> este arquivo será a representação em HTML do nosso componente
+        // Aqui codamos o que será o nosso componente
+        
+        <h2>Bem vindo ao nosso componente</h2>
+        
+        // Podemos ir no nosso html "app.component.html" e puxar a tag '<app-diretorio-criado>' para puxarmos este componente
+    
+    
+  
+  // 3 - Precisamos declarar este componente como um modulo na nosso arquivo principal. Para isso:
+    // a) No nosso arquivo app.module.ts
+        import { 'nome do componente que exportamos' } from 'pasta que esta o componente'
+        
+        @NgModule({
+          declarations: [
+          AppComponent (padrão),
+          'Nome do componente que exportamos' 
+          
+  // 4 - No nosso arquivo index.html precisamos puxar a tag "app-root" ou seja lá como chamamos o selector em app.component.ts
+  
+// ****************************************************************************************
+
+
+// Fazendo com o que o componente que criamos faça algo (event binding)
+
+  // Exemplo: para fazermos um evento "click" em um exemplo de blog post
+      // a) No nosso arquivo HTML criado, fazemos:
+      
+      <button (click)="onAddPost()">Aperte aqui</button> // Além de "click" existem outros vários eventos (mouseOver, doubleclick, etc)
+      
+      // b) Agora, no nosso arquivo component fazemos
+      
+       export class 'nome do nosso componente' (sem regra) {
+          onAddPost() {
+            alert('Post adicionado meu camarada :)')
+          }
+        }
+        
+   // Exemplo: para fazermos com o que escrevemos numa caixa de texto, seja transcrito para um paragrafo
+      // a) No nosso arquivo HTML, precisamos setar o nosso text area da seguinte forma
+      
+      <textarea row='6' #postInput></textarea>
+      <hr>
+      <button (click)="onAddPost(postInput)">Salvar o post</button>
+      <p>{{ newPost }}</p> // Esta {{}} nos permite chamar um arquivo JS
+      
+      // b) No nosso arquivo component que criamos o evento onAddPost, fazemos:
+      
+      export class 'nome do nosso componente' (sem regra) {
+          newPost = 'Sem conteudo'
+      
+          onAddPost(postInput: HTMLTextAreaElement) {
+            newPost = postInput.value;
+          }
+        }
+        
+      
+     // Uma outra forma de fazermos o exemplo anterior, é importar um modulo de formulário do próprio Angular.
+      // a) No nosso arquivo app.module.ts chamamos
+      
+      import { FormsModule } from '@angular/core'
+      
+      @NgModule({
+        declarations: []
+        imports: [
+          FormsModule
+          
+       // b) No nosso arquivo HTML, fazemos
+       
+       <textarea row='6' {{ngModel}} = 'enteredValue'></textarea>
+       <button (click)="onAddPost()">Salvar input :)</button>
+       
+       // c) Por fim, no nosso arquivo de componente novo criado, fazemos:
+       
+       export class 'nome do nosso componente' (sem regra) {
+          newPost = 'Sem conteudo'
+      
+          onAddPost() {
+            newPost = this.enteredValue;
+          }
+        }       
+      
+// ****************************************************************************************
+   
+// Instalando materiais do angular :) (Angular Material)
+
+// Instalação
+
+  npm install @angular/material
+  ng add @angular/material
+  
+  // Agora, no nosso arquivo package.json devemos ver alguma versão  do @angular/material instalado na nossa máquina
+
+// Setando o material que nós instalamos
+
+  // 1-Precisamos chamar o respectivo no módulo no nosso arquivo app.module.ts  (como exemplo, vamos chamar o módulo MatInputModule)
+  
+  import { MatInputModule } from '@angular/material/input'
+  
+  @NgModule({
+  declarations: [
+    AppComponent
+  ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    MatInputModule
+
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+  })
+  
+  
+  // 2-Precisamos chamar este modulo no nosso arquivo HTML 
+  
+  <mat-form-field>
+    <textarea matInput...
+  </mat-form-field>
+  
+  
+  // 3-Caso queiramos setar outro "material" do mesmo modulo, podemos fazer
+  
+  import { MatInputModule, MatCardModule } from '@angular/material/input'
+  
+  
+   @NgModule({
+  declarations: [
+    AppComponent
+  ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    MatInputModule,
+    MatCardModule
+
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+  })
+  
+  
+  // 4-Para adicionarmos um arquivo CSS, teremos que criar no aquivo component.ts criado
+  
+  @Component({
+    selector: (nome do diretorio criado com app na frente) Ex: app-post-creation
+    templateUrl: (diretório que está o arquivo HTML) 
+    styleUrls: [(diretório do arquivo CSS)]
+    
+    
+  // 5-No nosso arquivo CSS criado dentro do diretório do component, podemos setar chamando a tag do angular/material, assim:
+  
+  mat-card {
+    width: ...
+    margin: ...
+   }
+
+// Fazendo outro exemplo de importação do angular/material: toolbar
+
+  // 1- Primeiro criamos uma pasta nova
+  
+  // 2- Criamos os arquivos component.ts e component.html
+  
+  // 3- No arquivo .ts
+  
+  import { Component } from '@angular/material'
+  
+  @Component({
+    selector: 'app-header'
+    templateUrl:'./aponta para arquivo HTML'
+    
+  export class HeaderComponent {}
+    
+  // 4- No arquivo app.module.ts, chamamos 
+    
+  import { HeaderComponent } from 'diretorio'
+  
+  @NgModule({
+    declarations: [HeaderComponent]
+  
+  // 5- Por fim, no arquivo HTML principal (app.html) colocamos o selector que usamos:
+  
+  <app-header></app-header>
+  
+// ****************************************************************************************
+
+
+// Mais um exemplo (lista de posts). Neste, veremos o conceito de "directives"
+
+  // 1- Criamos uma nova pasta chamada "posts" com  um arquivo "post.component.ts" e outro chamado "post.component.html"
+  
+      // a) No arquivo component.ts
+      
+      import { Component } from '@angular/core'
+      
+      @Component ({
+        selector: 'app-post-list',
+        templateUrl: 'diretorio do arquivo HTML'
+     })
+     
+      export class PostList {
+        
+        posts = [ 
+          {tittle: 'Titulo do post 1', content: 'Conteudo do post 1'},
+          {tittle: 'Titulo do post 2', content: 'Conteudo do post 2'},
+      }
+  
+      // b) No arquivo HTML
+      
+      // Primeiro chamamos um modulo que é uma caixa de expansão 
+      
+      <mat-accordation>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            Título da nossa expansão
+      (fechar as tags)
+ 
+ // Fazendo uma automatização neste arquivo HTML
+ 
+      // No arquivo HTML fazemos:
+      
+      <mat-accordation>
+        <mat-expansion-panel *ngFor = "let post of posts">
+          <mat-expansion-panel-header>
+            {{ post.tittle }}
+          <mat-expansion-panel-header>
+            <p> {{ post.content }} </p>
+        
+//***************************************************************************************************************************
+
+// Criando novos posts na nossa lista
+
+  // No nosso arquivo post.component.html temos 
+
+    <mat-card>
+      <mat-form-field>
+        <input matInput type='text' {{ngFor}}='enteredTittle'>
+      </mat-form-field>
+      <mat-form-field>
+        <textarea matInput row='6' {{ngModel}}='enteredContent'></textarea>
+      </mat-form-field>
+      <button mat-raised-button (click)='onAddPost()'>Save post
+    <mat-card>
+
+  // No arquivo post.component.ts temos
+  
+  import { Component } from '@angular/core'
+  
+  @Component({
+  -padrão-
+  
+  export class PostCreateComponent {
+    enteredTitle = '';
+    enteredContent = '';
+    postCreated = new EventEmitter();
+    
+    onAddPost() {
+      const post = { tittle: this.enteredTittle, content: this.enteredContent }
+    }
+    this.postCreated.emit(post);
+    
+    
+  // No arquivo app.component.ts
+  
+  export class AppComponent {
+    posts = [];
+    
+    
+    onPostAdded(post) {
+      this.posts.push(post);
+    }
+  }
+   
+  // No nosso arquivo app.component.html 
+  
+  <app-header></app-header>
+  <main>
+    <app-post-create (postCreated)="onPostAdded($event)"></app-post-create>
+    <app-post-list></app-post-list>
+  </main>
+  
+
+
+
+        
+
+ 
